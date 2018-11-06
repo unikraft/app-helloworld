@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
 	printf("Hello world!\n");
 
-#if APPHELLOWORLD_PRINTARGS
+#if CONFIG_APPHELLOWORLD_PRINTARGS
 	int i;
 
 	printf("Arguments: ");
