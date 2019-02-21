@@ -3,7 +3,7 @@ UK_LIBS ?= $(PWD)/../../libs
 LIBS :=
 
 all:
-	@make -C $(UK_ROOT) A=$(PWD) L=$(LIBS)
+	@$(MAKE) -C $(UK_ROOT) A=$(PWD) L=$(LIBS)
 
 $(MAKECMDGOALS):
-	@make -C $(UK_ROOT) A=$(PWD) L=$(LIBS) $(MAKECMDGOALS)
+	@$(MAKE) -C $(UK_ROOT) A=$(PWD) L=$(LIBS) $(MAKECMDGOALS)
