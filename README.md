@@ -2,11 +2,9 @@
 
 To build and run this application please use the `kraft` script:
 
-    git clone https://github.com/unikraft/kraft
-    cd kraft
-    python setup.py install
-    kraft list
-    kraft up -p [platform] -m [architecture] [app name]
+    pip3 install git+https://github.com/unikraft/kraft.git
+    mkdir my-first-unikernel && cd my-first-unikernel
+    kraft up -p PLATFORM -m ARCHITECTURE helloworld
 
 For more information about `kraft` type ```kraft -h``` or read the
 [documentation](http://docs.unikraft.org).
