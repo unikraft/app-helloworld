@@ -10,3 +10,10 @@ config APPHELLOWORLD_PRINTARGS
 	default y
 	help
 	  Prints argument list (argv) to stdout
+
+config APPHELLOWORLD_SPINNER
+	bool "Stay alive"
+	select LIBUKTIME
+	default n
+	help
+	  Shows an animation instead of shutting down
