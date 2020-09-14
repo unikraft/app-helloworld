@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <uk/essentials.h>
 
 /* Import user configuration: */
 #include <uk/config.h>
@@ -7,21 +6,7 @@
 #if CONFIG_APPHELLOWORLD_SPINNER
 #include <time.h>
 #include <errno.h>
-
-static const char *spinner[] = {
-	">))'>        ",
-	" >))'>       ",
-	"  >))'>      ",
-	"   >))'>     ",
-	"    >))'o    ",
-	"     >))'>°  ",
-	"     <'((< ° ",
-	"    <'((<   '",
-	"   <'((<     ",
-	"  <'((<      ",
-	" <'((<       ",
-	"<'((<        ",
-};
+#include "monkey.h"
 
 static void millisleep(unsigned int millisec)
 {
@@ -53,11 +38,14 @@ int main(int argc, char *argv[])
 
 #if CONFIG_APPHELLOWORLD_SPINNER
 	i = 0;
-	printf("\n");
-	while (1) {
-		i %= ARRAY_SIZE(spinner);
-		printf("\r%s", spinner[i++]);
-		millisleep(1000);
+	printf("\n\n\n");
+	for (;;) {
+		i %= (monkey3_frame_count * 3);
+		printf("\r\033[2A %s \n", monkey3[i++]);
+		printf(" %s \n",          monkey3[i++]);
+		printf(" %s ",            monkey3[i++]);
+		fflush(stdout);
+		millisleep(250);
 	}
 #endif /* CONFIG_APPHELLOWORLD_SPINNER */
 }
