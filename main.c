@@ -1,7 +1,9 @@
 #include <stdio.h>
 
 /* Import user configuration: */
+#ifdef __Unikraft__
 #include <uk/config.h>
+#endif /* __Unikraft__ */
 
 #if CONFIG_APPHELLOWORLD_SPINNER
 #include <time.h>
