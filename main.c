@@ -1,11 +1,13 @@
 #include <stdio.h>
-#include <unistd.h>
 #include <uk/essentials.h>
 
 /* Import user configuration: */
 #include <uk/config.h>
 
 #if CONFIG_APPHELLOWORLD_SPINNER
+#include <time.h>
+#include <errno.h>
+
 static const char *spinner[] = {
 	">))'>        ",
 	" >))'>       ",
@@ -20,6 +22,18 @@ static const char *spinner[] = {
 	" <'((<       ",
 	"<'((<        ",
 };
+
+static void millisleep(unsigned int millisec)
+{
+	struct timespec ts;
+	int ret;
+
+	ts.tv_sec = millisec / 1000;
+	ts.tv_nsec = (millisec % 1000) * 1000000;
+	do
+		ret = nanosleep(&ts, &ts);
+	while (ret && errno == EINTR);
+}
 #endif /* CONFIG_APPHELLOWORLD_SPINNER */
 
 int main(int argc, char *argv[])
@@ -43,7 +57,7 @@ int main(int argc, char *argv[])
 	while (1) {
 		i %= ARRAY_SIZE(spinner);
 		printf("\r%s", spinner[i++]);
-		sleep(1);
+		millisleep(1000);
 	}
 #endif /* CONFIG_APPHELLOWORLD_SPINNER */
 }
