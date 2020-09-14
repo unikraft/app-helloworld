@@ -20,13 +20,14 @@ static const char *spinner[] = {
 	" <'((<       ",
 	"<'((<        ",
 };
-#endif
+#endif /* CONFIG_APPHELLOWORLD_SPINNER */
 
 int main(int argc, char *argv[])
 {
 #if CONFIG_APPHELLOWORLD_PRINTARGS || CONFIG_APPHELLOWORLD_SPINNER
 	int i;
 #endif
+
 	printf("Hello world!\n");
 
 #if CONFIG_APPHELLOWORLD_PRINTARGS
@@ -34,7 +35,7 @@ int main(int argc, char *argv[])
 	for (i=0; i<argc; ++i)
 		printf(" \"%s\"", argv[i]);
 	printf("\n");
-#endif
+#endif /* CONFIG_APPHELLOWORLD_PRINTARGS */
 
 #if CONFIG_APPHELLOWORLD_SPINNER
 	i = 0;
@@ -44,5 +45,5 @@ int main(int argc, char *argv[])
 		printf("\r%s", spinner[i++]);
 		sleep(1);
 	}
-#endif
+#endif /* CONFIG_APPHELLOWORLD_SPINNER */
 }
