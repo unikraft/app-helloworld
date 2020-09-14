@@ -37,9 +37,44 @@
 #ifndef MONKEY_H
 #define MONKEY_H
 
+#ifdef __Unikraft__
+#include <uk/config.h>
+#include <uk/plat/console.h>
+#endif /* __Unikraft__ */
+
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 #endif /* ARRAY_SIZE */
+
+#if !MONKEY_COLORS && __Unikraft__
+#if CONFIG_LIBUKBOOT_BANNER_POWEREDBY_ANSI || \
+    CONFIG_LIBUKBOOT_BANNER_POWEREDBY_EAANSI || \
+    CONFIG_LIBUKBOOT_BANNER_POWEREDBY_U8ANSI
+/*
+ * Gray monkey for blue Unikraft logo
+ */
+#define MC_RST   UK_ANSI_MOD_RESET
+#define MC_BODY  MC_RST UK_ANSI_MOD_BOLD UK_ANSI_MOD_COLORFG(UK_ANSI_COLOR_BLACK)
+#define MC_FACE  MC_RST UK_ANSI_MOD_COLORFG(UK_ANSI_COLOR_WHITE)
+#define MC_EYE   MC_RST /* terminal default color */
+#define MC_MOUTH MC_FACE
+#define MONKEY_COLORS
+
+#elif CONFIG_LIBUKBOOT_BANNER_POWEREDBY_ANSI2 || \
+      CONFIG_LIBUKBOOT_BANNER_POWEREDBY_EAANSI2 || \
+      CONFIG_LIBUKBOOT_BANNER_POWEREDBY_U8ANSI2
+/*
+ * Brown monkey for gray Unikraft logo
+ */
+#define MC_RST   UK_ANSI_MOD_RESET
+#define MC_BODY  MC_RST UK_ANSI_MOD_COLORFG(UK_ANSI_COLOR_YELLOW)
+#define MC_FACE  MC_RST UK_ANSI_MOD_BOLD UK_ANSI_MOD_COLORFG(UK_ANSI_COLOR_YELLOW)
+#define MC_EYE   MC_RST /* terminal default color */
+#define MC_MOUTH MC_FACE
+#define MONKEY_COLORS
+
+#endif
+#endif /* !MONKEY_COLORS && __Unikraft__ */
 
 #ifndef MONKEY_COLORS
 /* No colors */
