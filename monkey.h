@@ -41,138 +41,147 @@
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 #endif /* ARRAY_SIZE */
 
+#ifndef MONKEY_COLORS
+/* No colors */
+#define MC_RST   ""
+#define MC_BODY  MC_RST
+#define MC_FACE  MC_RST
+#define MC_EYE   MC_RST
+#define MC_MOUTH MC_RST
+#endif /* !MONKEY_COLORS */
+
 static const char *monkey3[] = {
-	"     _               ",
-	"   c'_'o  .--'       ",
-	"   (| |)_/           ",
+	MC_RST "     " MC_BODY "_" MC_RST "               ",
+	MC_RST "   " MC_FACE "c" MC_EYE "'" MC_MOUTH "_" MC_EYE "'" MC_FACE "o" MC_RST "  " MC_BODY ".--'" MC_RST "       ",
+	MC_RST "   " MC_BODY "(| |)_/" MC_RST "           ",
 
-	"     _               ",
-	"   c'o'o  .--.       ",
-	"   (| |)_/           ",
+	MC_RST "     " MC_BODY "_" MC_RST "               ",
+	MC_RST "   " MC_FACE "c" MC_EYE "'" MC_MOUTH "o" MC_EYE "'" MC_FACE "o" MC_RST "  " MC_BODY ".--." MC_RST "       ",
+	MC_RST "   " MC_BODY "(| |)_/" MC_RST "           ",
 
-	"     _               ",
-	"   c'_'o  .-.        ",
-	"   (| |)_/   `       ",
+	MC_RST "     " MC_BODY "_" MC_RST "               ",
+	MC_RST "   " MC_FACE "c" MC_EYE "'" MC_MOUTH "_" MC_EYE "'" MC_FACE "o" MC_RST "  " MC_BODY ".-." MC_RST "        ",
+	MC_RST "   " MC_BODY "(| |)_/" MC_RST "   " MC_BODY "`" MC_RST "       ",
 
-	"     _               ",
-	"   c'o'o  .--.       ",
-	"   (| |)_/           ",
+	MC_RST "     " MC_BODY "_" MC_RST "               ",
+	MC_RST "   " MC_FACE "c" MC_EYE "'" MC_MOUTH "o" MC_EYE "'" MC_FACE "o" MC_RST "  " MC_BODY ".--." MC_RST "       ",
+	MC_RST "   " MC_BODY "(| |)_/" MC_RST "           ",
 
-	"     _               ",
-	"   c'_'o  .--'       ",
-	"   (| |)_/           ",
+	MC_RST "     " MC_BODY "_" MC_RST "               ",
+	MC_RST "   " MC_FACE "c" MC_EYE "'" MC_MOUTH "_" MC_EYE "'" MC_FACE "o" MC_RST "  " MC_BODY ".--'" MC_RST "       ",
+	MC_RST "   " MC_BODY "(| |)_/" MC_RST "           ",
 
-	"     _               ",
-	"   c'_'o  .--.       ",
-	"   (| |)_/           ",
+	MC_RST "     " MC_BODY "_" MC_RST "               ",
+	MC_RST "   " MC_FACE "c" MC_EYE "'" MC_MOUTH "_" MC_EYE "'" MC_FACE "o" MC_RST "  " MC_BODY ".--." MC_RST "       ",
+	MC_RST "   " MC_BODY "(| |)_/" MC_RST "           ",
 
-	"     _               ",
-	"   c'_'o  .-.        ",
-	"   (| |)_/   `       ",
+	MC_RST "     " MC_BODY "_" MC_RST "               ",
+	MC_RST "   " MC_FACE "c" MC_EYE "'" MC_MOUTH "_" MC_EYE "'" MC_FACE "o" MC_RST "  " MC_BODY ".-." MC_RST "        ",
+	MC_RST "   " MC_BODY "(| |)_/" MC_RST "   " MC_BODY "`" MC_RST "       ",
 
-	"     _               ",
-	"   c'_'o  .--.       ",
-	"   (| |)_/           ",
+	MC_RST "     " MC_BODY "_" MC_RST "               ",
+	MC_RST "   " MC_FACE "c" MC_EYE "'" MC_MOUTH "_" MC_EYE "'" MC_FACE "o" MC_RST "  " MC_BODY ".--." MC_RST "       ",
+	MC_RST "   " MC_BODY "(| |)_/" MC_RST "           ",
 
-	"     _               ",
-	"   c-_-o  .--'       ",
-	"   (| |)_/           ",
+	MC_RST "     " MC_BODY "_" MC_RST "               ",
+	MC_RST "   " MC_FACE "c-" MC_MOUTH "_" MC_FACE "-o" MC_RST "  " MC_BODY ".--'" MC_RST "       ",
+	MC_RST "   " MC_BODY "(| |)_/" MC_RST "           ",
 
-	"     _               ",
-	"   c'_'o  .--.       ",
-	"   (| |)_/           ",
+	MC_RST "     " MC_BODY "_" MC_RST "               ",
+	MC_RST "   " MC_FACE "c" MC_EYE "'" MC_MOUTH "_" MC_EYE "'" MC_FACE "o" MC_RST "  " MC_BODY ".--." MC_RST "       ",
+	MC_RST "   " MC_BODY "(| |)_/" MC_RST "           ",
 
-	"     _               ",
-	"   c'_'o  .-.        ",
-	"   (| |)_/   `       ",
+	MC_RST "     " MC_BODY "_" MC_RST "               ",
+	MC_RST "   " MC_FACE "c" MC_EYE "'" MC_MOUTH "_" MC_EYE "'" MC_FACE "o" MC_RST "  " MC_BODY ".-." MC_RST "        ",
+	MC_RST "   " MC_BODY "(| |)_/" MC_RST "   " MC_BODY "`" MC_RST "       ",
 
-	"     _               ",
-	"   c'_'o  .--.       ",
-	"   (| |)_/           ",
+	MC_RST "     " MC_BODY "_" MC_RST "               ",
+	MC_RST "   " MC_FACE "c" MC_EYE "'" MC_MOUTH "_" MC_EYE "'" MC_FACE "o" MC_RST "  " MC_BODY ".--." MC_RST "       ",
+	MC_RST "   " MC_BODY "(| |)_/" MC_RST "           ",
 
-	".---    _            ",
-	"`--,___c \".          ",
-	"   (,--( \\           ",
+	MC_BODY ".---" MC_RST "    " MC_BODY "_" MC_RST "            ",
+	MC_BODY "`--,___" MC_FACE "c " MC_EYE "\"" MC_MOUTH "." MC_RST "          ",
+	MC_RST "   " MC_BODY "(,--( \\" MC_RST "           ",
 
-	".--      _           ",
-	"`---,___c \".         ",
-	"    ( \\-(,           ",
+	MC_BODY ".--" MC_RST "      " MC_BODY "_" MC_RST "           ",
+	MC_BODY "`---,___" MC_FACE "c " MC_EYE "\"" MC_MOUTH "." MC_RST "         ",
+	MC_RST "    " MC_BODY "( \\-(," MC_RST "           ",
 
-	".-        _          ",
-	"`---'\\___c \".        ",
-	"     (,--( \\         ",
+	MC_BODY ".-" MC_RST "        " MC_BODY "_" MC_RST "          ",
+	MC_BODY "`---'\\___" MC_FACE "c " MC_EYE "\"" MC_MOUTH "." MC_RST "        ",
+	MC_RST "     " MC_BODY "(,--( \\" MC_RST "         ",
 
-	".    _     _         ",
-	"`---' \\___c \".       ",
-	"      ( \\-(,         ",
+	MC_BODY "." MC_RST "    " MC_BODY "_" MC_RST "     " MC_BODY "_" MC_RST "         ",
+	MC_BODY "`---'" MC_RST " " MC_BODY "\\___" MC_FACE "c " MC_EYE "\"" MC_MOUTH "." MC_RST "       ",
+	MC_RST "      " MC_BODY "( \\-(," MC_RST "         ",
 
-	"     _      _        ",
-	"`---' `,___c \".      ",
-	"       (,--( \\       ",
+	MC_RST "     " MC_BODY "_" MC_RST "      " MC_BODY "_" MC_RST "        ",
+	MC_BODY "`---'" MC_RST " " MC_BODY "`,___" MC_FACE "c " MC_EYE "\"" MC_MOUTH "." MC_RST "      ",
+	MC_RST "       " MC_BODY "(,--( \\" MC_RST "       ",
 
-	"     _       _       ",
-	" ---' `-,___c \".     ",
-	"        ( \\-(,       ",
+	MC_RST "     " MC_BODY "_" MC_RST "       " MC_BODY "_" MC_RST "       ",
+	MC_RST " " MC_BODY "---'" MC_RST " " MC_BODY "`-,___" MC_FACE "c " MC_EYE "\"" MC_MOUTH "." MC_RST "     ",
+	MC_RST "        " MC_BODY "( \\-(," MC_RST "       ",
 
-	"     _        _      ",
-	"  --' `--,___c \".    ",
-	"         (,--( \\     ",
+	MC_RST "     " MC_BODY "_" MC_RST "        " MC_BODY "_" MC_RST "      ",
+	MC_RST "  " MC_BODY "--'" MC_RST " " MC_BODY "`--,___" MC_FACE "c " MC_EYE "\"" MC_MOUTH "." MC_RST "    ",
+	MC_RST "         " MC_BODY "(,--( \\" MC_RST "     ",
 
-	"     _         _     ",
-	"   -' `---,___c \".   ",
-	"          ( \\-(,     ",
+	MC_RST "     " MC_BODY "_" MC_RST "         " MC_BODY "_" MC_RST "     ",
+	MC_RST "   " MC_BODY "-'" MC_RST " " MC_BODY "`---,___" MC_FACE "c " MC_EYE "\"" MC_MOUTH "." MC_RST "   ",
+	MC_RST "          " MC_BODY "( \\-(," MC_RST "     ",
 
-	"     _          _    ",
-	"    ' `---'\\___c \".  ",
-	"           (,--( \\   ",
+	MC_RST "     " MC_BODY "_" MC_RST "          " MC_BODY "_" MC_RST "    ",
+	MC_RST "    " MC_BODY "'" MC_RST " " MC_BODY "`---'\\___" MC_FACE "c " MC_EYE "\"" MC_MOUTH "." MC_RST "  ",
+	MC_RST "           " MC_BODY "(,--( \\" MC_RST "   ",
 
-	"     _     _     _   ",
-	"      `---' \\___c \". ",
-	"            ( \\-(,   ",
+	MC_RST "     " MC_BODY "_" MC_RST "     " MC_BODY "_" MC_RST "     " MC_BODY "_" MC_RST "   ",
+	MC_RST "      " MC_BODY "`---'" MC_RST " " MC_BODY "\\___" MC_FACE "c " MC_EYE "\"" MC_MOUTH "." MC_RST " ",
+	MC_RST "            " MC_BODY "( \\-(," MC_RST "   ",
 
-	"           _    _    ",
-	"      `---' | c   o  ",
-	"            \\_(|,|)  ",
+	MC_RST "           " MC_BODY "_" MC_RST "    " MC_BODY "_" MC_RST "    ",
+	MC_RST "      " MC_BODY "`---'" MC_RST " " MC_BODY "|" MC_RST " " MC_FACE "c" MC_BODY "   " MC_FACE "o" MC_RST "  ",
+	MC_RST "            " MC_BODY "\\_(|,|)" MC_RST "  ",
 
-	"             _  .---.",
-	"           .\" o___,-'",
-	"            / )--,)  ",
+	MC_RST "             " MC_BODY "_" MC_RST "  " MC_BODY ".---." MC_RST,
+	MC_RST "           " MC_MOUTH "." MC_EYE "\"" MC_FACE " o" MC_BODY "___,-'" MC_RST,
+	MC_RST "            " MC_BODY "/ )--,)" MC_RST "  ",
 
-	"            _    ---.",
-	"          .\" o___,--'",
-	"            ,)-/ )   ",
+	MC_RST "            " MC_BODY "_" MC_RST "    " MC_BODY "---." MC_RST,
+	MC_RST "          " MC_MOUTH "." MC_EYE "\"" MC_FACE " o" MC_BODY "___,--'" MC_RST,
+	MC_RST "            " MC_BODY ",)-/ )" MC_RST "   ",
 
-	"           _      --.",
-	"         .\" o___,---'",
-	"          / )--,)    ",
+	MC_RST "           " MC_BODY "_" MC_RST "      " MC_BODY "--." MC_RST,
+	MC_RST "         " MC_MOUTH "." MC_EYE "\"" MC_FACE " o" MC_BODY "___,---'" MC_RST,
+	MC_RST "          " MC_BODY "/ )--,)" MC_RST "    ",
 
-	"          _        -.",
-	"        .\" o___/`---'",
-	"          ,)-/ )     ",
+	MC_RST "          " MC_BODY "_" MC_RST "        " MC_BODY "-." MC_RST,
+	MC_RST "        " MC_MOUTH "." MC_EYE "\"" MC_FACE " o" MC_BODY "___/`---'" MC_RST,
+	MC_RST "          " MC_BODY ",)-/ )" MC_RST "     ",
 
-	"         _     _    .",
-	"       .\" o___/ `---'",
-	"        / )--,)      ",
+	MC_RST "         " MC_BODY "_" MC_RST "     " MC_BODY "_" MC_RST "    " MC_BODY "." MC_RST,
+	MC_RST "       " MC_MOUTH "." MC_EYE "\"" MC_FACE " o" MC_BODY "___/" MC_RST " " MC_BODY "`---'" MC_RST,
+	MC_RST "        " MC_BODY "/ )--,)" MC_RST "      ",
 
-	"        _      _     ",
-	"      .\" o___,' `---'",
-	"        ,)-/ )       ",
+	MC_RST "        " MC_BODY "_" MC_RST "      " MC_BODY "_" MC_RST "     ",
+	MC_RST "      " MC_MOUTH "." MC_EYE "\"" MC_FACE " o" MC_BODY "___,'" MC_RST " " MC_BODY "`---'" MC_RST,
+	MC_RST "        " MC_BODY ",)-/ )" MC_RST "       ",
 
-	"       _       _     ",
-	"     .\" o___,-' `--- ",
-	"      / )--,)        ",
+	MC_RST "       " MC_BODY "_" MC_RST "       " MC_BODY "_" MC_RST "     ",
+	MC_RST "     " MC_MOUTH "." MC_EYE "\"" MC_FACE " o" MC_BODY "___,-'" MC_RST " " MC_BODY "`---" MC_RST " ",
+	MC_RST "      " MC_BODY "/ )--,)" MC_RST "        ",
 
-	"      _        _     ",
-	"    .\" o___,--' `--  ",
-	"      ,)-/ )         ",
+	MC_RST "      " MC_BODY "_" MC_RST "        " MC_BODY "_" MC_RST "     ",
+	MC_RST "    " MC_MOUTH "." MC_EYE "\"" MC_FACE " o" MC_BODY "___,--'" MC_RST " " MC_BODY "`--" MC_RST "  ",
+	MC_RST "      " MC_BODY ",)-/ )" MC_RST "         ",
 
-	"     _         _     ",
-	"   .\" o___,---' `-   ",
-	"     / )-,)          ",
+	MC_RST "     " MC_BODY "_" MC_RST "         " MC_BODY "_" MC_RST "     ",
+	MC_RST "   " MC_MOUTH "." MC_EYE "\"" MC_FACE " o" MC_BODY "___,---'" MC_RST " " MC_BODY "`-" MC_RST "   ",
+	MC_RST "     " MC_BODY "/ )-,)" MC_RST "          ",
 
-	"    _          _     ",
-	"  .\" o___,----' `    ",
-	"    ,)-/ )           ",
+	MC_RST "    " MC_BODY "_" MC_RST "          " MC_BODY "_" MC_RST "     ",
+	MC_RST "  " MC_MOUTH "." MC_EYE "\"" MC_FACE " o" MC_BODY "___,----'" MC_RST " " MC_BODY "`" MC_RST "    ",
+	MC_RST "    " MC_BODY ",)-/ )" MC_RST "           ",
 };
 
 #define monkey3_frame_count (ARRAY_SIZE(monkey3) / 3)
