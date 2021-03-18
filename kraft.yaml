@@ -1,12 +1,12 @@
-specification: '0.4'
-
+specification: '0.5'
+name: helloworld
 unikraft: '0.5'
-
-architectures:
-  x86_64: true
-  arm64: true
-      
-platforms:
-  linuxu: true
-  kvm: true
-  xen: true
+targets:
+  - architecture: x86_64
+    platform: linuxu
+  - architecture: x86_64
+    platform: kvm
+  - architecture: x86_64
+    platform: xen
+  - architecture: arm64
+    platform: kvm
