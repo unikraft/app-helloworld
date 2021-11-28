@@ -12,3 +12,5 @@ targets:
     platform: linuxu
   - architecture: arm64
     platform: kvm
+  - architecture: arm
+    platform: linuxu
