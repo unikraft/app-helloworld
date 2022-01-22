@@ -45,5 +45,19 @@ sudo qemu-system-x86_64 -kernel "build/app-helloworld_kvm-x86_64" \
 ./build/app-helloworld_linuxu-x86_64
 ```
 
-For more information about `kraft` type ```kraft -h``` or read the
+- If you built the application for `xen`:
+  - First, you need to create a configuration file `app-helloworld.cfg`.
+    It should look something like:
+    ```
+    name          = "app-helloworld"
+    vcpus         = "1"
+    memory        = "4"
+    kernel        = "./build/app-helloworld_xen-x86_64"
+    ```
+  - To run the application you can use:
+    ```
+    xl create -c app-helloworld.cfg
+    ```
+
+For more information about `kraft` type `kraft -h` or read the
 [documentation](http://docs.unikraft.org).
