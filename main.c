@@ -50,4 +50,6 @@ int main(int argc, char *argv[])
 		millisleep(250);
 	}
 #endif /* CONFIG_APPHELLOWORLD_SPINNER */
+
+	return 0;
 }
