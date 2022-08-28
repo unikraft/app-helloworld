@@ -60,4 +60,4 @@ sudo qemu-system-x86_64 -kernel "build/app-helloworld_kvm-x86_64" \
     ```
 
 For more information about `kraft` type `kraft -h` or read the
-[documentation](http://docs.unikraft.org).
+[documentation](https://unikraft.org/docs/).
