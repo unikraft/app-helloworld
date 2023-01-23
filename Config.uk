@@ -13,7 +13,7 @@ config APPHELLOWORLD_PRINTARGS
 
 config APPHELLOWORLD_SPINNER
 	bool "Stay alive"
-	select LIBUKTIME
+	select LIBPOSIX_TIME
 	default n
 	help
 	  Shows an animation instead of shutting down
