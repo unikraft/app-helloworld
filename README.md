@@ -35,14 +35,14 @@ $ make
 Run the application:
 - If you built the application for `kvm`:
 ```
-sudo qemu-system-x86_64 -kernel "build/app-helloworld_kvm-x86_64" \
+sudo qemu-system-x86_64 -kernel "build/helloworld_kvm-x86_64" \
                         -enable-kvm \
                         -nographic
 ```
 
 - If you built the application for `linuxu`:
 ```
-./build/app-helloworld_linuxu-x86_64
+./build/helloworld_linuxu-x86_64
 ```
 
 - If you built the application for `xen`:
@@ -52,7 +52,7 @@ sudo qemu-system-x86_64 -kernel "build/app-helloworld_kvm-x86_64" \
     name          = "app-helloworld"
     vcpus         = "1"
     memory        = "4"
-    kernel        = "./build/app-helloworld_xen-x86_64"
+    kernel        = "./build/helloworld_xen-x86_64"
     ```
   - To run the application you can use:
     ```
