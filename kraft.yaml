@@ -7,12 +7,12 @@ targets:
   - architecture: x86_64
     platform: linuxu
   - architecture: x86_64
-    platform: kvm
+    platform: qemu
   - architecture: x86_64
     platform: xen
   - architecture: arm64
     platform: linuxu
   - architecture: arm64
-    platform: kvm
+    platform: qemu
   - architecture: arm
     platform: linuxu
