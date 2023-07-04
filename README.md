@@ -50,7 +50,7 @@ cd helloworld/
 mkdir .unikraft
 git clone https://github.com/unikraft/unikraft .unikraft/unikraft
 UK_DEFCONFIG=$(pwd)/.config.helloworld_qemu-x86_64 make defconfig
-make -j(nproc)
+make -j $(nproc)
 /usr/bin/qemu-system-x86_64 -kernel build/helloworld_qemu-x86_64 -nographic
 ```
 
@@ -61,7 +61,7 @@ The same can be done for `AArch64`, by running the commands below:
 ```console
 make properclean
 UK_DEFCONFIG=$(pwd)/.config.helloworld_qemu-arm64 make defconfig
-make -j(nproc)
+make -j $(nproc)
 /usr/bin/qemu-system-aarch64 -kernel build/helloworld_qemu-arm64 -nographic -machine virt -cpu cortex-a57
 ```
 
