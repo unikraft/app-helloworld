@@ -49,7 +49,7 @@ git clone https://github.com/unikraft/app-helloworld helloworld
 cd helloworld/
 mkdir .unikraft
 git clone https://github.com/unikraft/unikraft .unikraft/unikraft
-UK_DEFCONFIG=$(pwd)/.config.helloworld_qemu-x86_64 make defconfig
+UK_DEFCONFIG=$(pwd)/.config.helloworld-qemu-x86_64 make defconfig
 make -j $(nproc)
 /usr/bin/qemu-system-x86_64 -kernel build/helloworld_qemu-x86_64 -nographic
 ```
@@ -60,7 +60,7 @@ The same can be done for `AArch64`, by running the commands below:
 
 ```console
 make properclean
-UK_DEFCONFIG=$(pwd)/.config.helloworld_qemu-arm64 make defconfig
+UK_DEFCONFIG=$(pwd)/.config.helloworld-qemu-aarch64 make defconfig
 make -j $(nproc)
 /usr/bin/qemu-system-aarch64 -kernel build/helloworld_qemu-arm64 -nographic -machine virt -cpu cortex-a57
 ```
@@ -133,7 +133,7 @@ Follow the steps below for the setup:
      You will see the contents of the repository:
 
      ```text
-     .config.helloworld_qemu-arm64  .config.helloworld_qemu-x86_64  kraft.yaml  Makefile  Makefile.uk  README.md  run-qemu-aarch64.sh*  run-qemu-x86_64.sh* [...]
+     .config.helloworld-fc-x86_64  .config.helloworld-qemu-aarch64  .config.helloworld-qemu-x86_64  helloworld-fc-x86_64.json  kraft.yaml  Makefile  Makefile.uk  README.md [...]
      ```
 
   1. While inside the `helloworld/` directory, create the `.unikraft/` directory:
@@ -191,7 +191,7 @@ Follow the steps below for the setup:
 ### Configure
 
 Configuring, building and running a Unikraft application depends on our choice of platform and architecture.
-Currently, supported platforms are QEMU (KVM), Xen and linuxu.
+Currently, supported platforms are QEMU (KVM), Firecaker (KVM), Xen and linuxu.
 QEMU (KVM) is known to be working, so we focus on that.
 
 Supported architectures are x86_64 and AArch64.
@@ -200,10 +200,10 @@ Use the corresponding the configuration files (`config-...`), according to your 
 
 #### QEMU x86_64
 
-Use the `.config.helloworld_qemu-x86_64` configuration file together with `make defconfig` to create the configuration file:
+Use the `.config.helloworld-qemu-x86_64` configuration file together with `make defconfig` to create the configuration file:
 
 ```console
-UK_DEFCONFIG=$(pwd)/.config.helloworld_qemu-x86_64 make defconfig
+UK_DEFCONFIG=$(pwd)/.config.helloworld-qemu-x86_64 make defconfig
 ```
 
 This results in the creation of the `.config` file:
@@ -217,10 +217,10 @@ The `.config` file will be used in the build step.
 
 #### QEMU AArch64
 
-Use the `.config.helloworld_qemu-arm64` configuration file together with `make defconfig` to create the configuration file:
+Use the `.config.helloworld-qemu-aarch64` configuration file together with `make defconfig` to create the configuration file:
 
 ```console
-UK_DEFCONFIG=$(pwd)/.config.helloworld_qemu-arm64 make defconfig
+UK_DEFCONFIG=$(pwd)/.config.helloworld-qemu-aarch64 make defconfig
 ```
 
 Similar to the x86_64 configuration, this results in the creation of the `.config` file that will be used in the build step.
@@ -303,7 +303,7 @@ Run the resulting image using `qemu-system`.
 
 #### QEMU x86_64
 
-To run the QEMU x86_64 build, use `qemu-system-x86_64`:
+To run the QEMU x86_64 build, use:
 
 ```console
 /usr/bin/qemu-system-x86_64 -kernel build/helloworld_qemu-x86_64 -nographic
@@ -313,9 +313,6 @@ You will be met by the Unikraft banner, along with the `Hello, world!` message:
 
 ```text
 qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID.01H:ECX.vmx [bit 5]
-1: Set IPv4 address 172.44.0.2 mask 255.255.255.0 gw 172.44.0.1
-en1: Added
-en1: Interface is up
 Powered by
 o.   .o       _ _               __ _
 Oo   Oo  ___ (_) | __ __  __ _ ' _) :_
@@ -328,7 +325,7 @@ Hello world!
 
 #### QEMU AArch64
 
-To run the AArch64 build, use `run-qemu-aarch64.sh`:
+To run the AArch64 build, use:
 
 ```console
 /usr/bin/qemu-system-aarch64 -kernel build/helloworld_qemu-arm64 -nographic -machine virt -cpu cortex-a57
@@ -337,9 +334,6 @@ To run the AArch64 build, use `run-qemu-aarch64.sh`:
 Same as running on x86_64, the application will start:
 
 ```
-1: Set IPv4 address 172.44.0.2 mask 255.255.255.0 gw 172.44.0.1
-en1: Added
-en1: Interface is up
 Powered by
 o.   .o       _ _               __ _
 Oo   Oo  ___ (_) | __ __  __ _ ' _) :_
@@ -347,5 +341,49 @@ oO   oO ' _ `| | |/ /  _)' _` | |_|  _)
 oOo oOO| | | | |   (| | | (_) |  _) :_
  OoOoO ._, ._:_:_,\_._,  .__,_:_, \___)
                   Atlas 0.13.1~5eb820bd
+Hello world!
+```
+
+### Building and Running with Firecracker
+
+[Firecracker](https://firecracker-microvm.github.io/) is a lightweight VMM (*virtual machine manager*) that can be used as more efficient alternative to QEMU.
+
+Configure and build commands are similar to a QEMU-based build with an initrd-based filesystem:
+
+```console
+make distclean
+UK_DEFCONFIG=$(pwd)/.config.helloworld-fc-x86_64 make defconfig
+make -j $(nproc)
+```
+
+To use Firecraker, you need to download a [Firecracker release](https://github.com/firecracker-microvm/firecracker/releases).
+You can use the commands below to make the `firecracker-x86_64` executable from release v1.4.0 available globally in the command line:
+
+```console
+cd /tmp
+wget https://github.com/firecracker-microvm/firecracker/releases/download/v1.4.0/firecracker-v1.4.0-x86_64.tgz
+tar xzf firecracker-v1.4.0-x86_64.tgz
+sudo cp release-v1.4.0-x86_64/firecracker-v1.4.0-x86_64 /usr/local/bin/firecracker-x86_64
+```
+
+To run a unikernel image, you need to configure a JSON file.
+This is the `helloworld-fc-x86_64.json` file.
+Pass this file to the `firecracker-x86_64` command to run the Unikernel instance:
+
+```console
+rm /tmp/firecracker.socket
+firecracker-x86_64 --api-sock /tmp/firecracker.socket --config-file helloworld-fc-x86_64.json
+```
+
+Same as running with QEMU, the application will start:
+
+```text
+Powered by
+o.   .o       _ _               __ _
+Oo   Oo  ___ (_) | __ __  __ _ ' _) :_
+oO   oO ' _ `| | |/ /  _)' _` | |_|  _)
+oOo oOO| | | | |   (| | | (_) |  _) :_
+ OoOoO ._, ._:_:_,\_._,  .__,_:_, \___)
+                  Atlas 0.13.1~2f2ecc9f
 Hello world!
 ```
