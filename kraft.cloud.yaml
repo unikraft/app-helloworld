@@ -1,0 +1,12 @@
+specification: '0.5'
+name: helloworld
+unikraft:
+  version: cloud
+targets:
+  - name: kraftcloud-x86_64
+    architecture: x86_64
+    platform: firecracker
+libraries:
+  ukp-bin:
+    source: https://github.com/unikraft-io/lib-ukp-bin
+    version: stable
