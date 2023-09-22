@@ -2,3 +2,4 @@
 /.config.old
 /build/
 /.unikraft/
+/workdir/
