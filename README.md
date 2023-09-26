@@ -47,11 +47,12 @@ For building and running everything for `x86_64`, follow the steps below:
 ```console
 git clone https://github.com/unikraft/app-helloworld helloworld
 cd helloworld/
-mkdir .unikraft
-git clone https://github.com/unikraft/unikraft .unikraft/unikraft
-UK_DEFCONFIG=$(pwd)/.config.helloworld-qemu-x86_64 make defconfig
-make -j $(nproc)
-/usr/bin/qemu-system-x86_64 -kernel build/helloworld_qemu-x86_64 -nographic
+./scripts/setup.sh
+wget https://raw.githubusercontent.com/unikraft/app-testing/staging/scripts/generate.py -O scripts/generate.py
+chmod a+x scripts/generate.py
+./scripts/generate.py
+./scripts/build/make-qemu-x86_64.sh
+./scripts/run/qemu-x86_64.sh
 ```
 
 This will configure, build and run the `helloworld` application, resulting in a `Hello world!` message being printed, along with the Unikraft banner.
@@ -59,10 +60,14 @@ This will configure, build and run the `helloworld` application, resulting in a 
 The same can be done for `AArch64`, by running the commands below:
 
 ```console
-make properclean
-UK_DEFCONFIG=$(pwd)/.config.helloworld-qemu-aarch64 make defconfig
-make -j $(nproc)
-/usr/bin/qemu-system-aarch64 -kernel build/helloworld_qemu-arm64 -nographic -machine virt -cpu cortex-a57
+git clone https://github.com/unikraft/app-helloworld helloworld
+cd helloworld/
+./scripts/setup.sh
+wget https://raw.githubusercontent.com/unikraft/app-testing/staging/scripts/generate.py -O scripts/generate.py
+chmod a+x scripts/generate.py
+./scripts/generate.py
+./scripts/build/make-qemu-arm64.sh
+./scripts/run/qemu-arm64.sh
 ```
 
 Similar to the `x86_64` build, this will result in a `Hello world!` message being printed.
@@ -133,44 +138,26 @@ Follow the steps below for the setup:
      You will see the contents of the repository:
 
      ```text
-     .config.helloworld-fc-x86_64  .config.helloworld-qemu-aarch64  .config.helloworld-qemu-x86_64  helloworld-fc-x86_64.json  kraft.yaml  Makefile  Makefile.uk  README.md [...]
+     [...] README.md  defconfigs/  kraft.cloud.yaml  kraft.yaml  main.c  monkey.h  scripts/
      ```
 
-  1. While inside the `helloworld/` directory, create the `.unikraft/` directory:
+  1. While inside the `helloworld` directory, use the `scripts/setup.sh` to set repositories and required files:
 
      ```console
-     mkdir .unikraft
+     ./scripts/setup.sh
      ```
 
-     Enter the `.unikraft/` directory:
-
-     ```console
-     cd .unikraft/
-     ```
-
-  1. While inside the `.unikraft` directory, clone the [`unikraft` repository](https://github.com/unikraft/unikraft):
-
-     ```console
-     git clone https://github.com/unikraft/unikraft unikraft
-     ```
-
-  1. Get back to the application directory:
-
-     ```console
-     cd ../
-     ```
-
-     Use the `tree` command to inspect the contents of the `.unikraft/` directory.
+     Use the `tree` command to inspect the contents of the `workdir/` directory.
      It should print something like this:
 
      ```console
-     tree -F -L 2 .unikraft/
+     tree -F -L 2 workdir/
      ```
 
      You should see the following layout:
 
      ```text
-     .unikraft/
+     workdir/
      `-- unikraft/
          |-- arch/
          |-- Config.uk
@@ -188,22 +175,93 @@ Follow the steps below for the setup:
      10 directories, 7 files
      ```
 
+## Scripted Building and Running
+
+To make it easier to build, run and test different configurations, the repository provides a set of scripts that do everything required.
+These are scripts used for building different configurations of the helloworld application and for running these with all the requirements behind the scenes.
+
+First of all, grab the [`generate.py` script](https://github.com/unikraft/app-testing/blob/staging/scripts/generate.py) and place it in the `scripts/` directory by running:
+
+```console
+wget https://raw.githubusercontent.com/unikraft/app-testing/staging/scripts/generate.py -O scripts/generate.py
+chmod a+x scripts/generate.py
+```
+
+Now, run the `generate.py` script.
+You must run it from the root directory of this repository:
+
+```console
+./scripts/generate.py
+```
+
+The scripts (as shell scripts) are now generated in `scripts/build/` and `scripts/run/`:
+
+```text
+scripts/
+|-- build/
+|   |-- kraft-fc-arm64.sh*
+|   |-- kraft-fc-x86_64.sh*
+|   |-- kraft-qemu-arm64.sh*
+|   |-- kraft-qemu-x86_64.sh*
+|   |-- make-fc-arm64.sh*
+|   |-- make-fc-x86_64.sh*
+|   |-- make-qemu-arm64.sh*
+|   `-- make-qemu-x86_64.sh*
+|-- generate.py*
+|-- run/
+|   |-- fc-arm64.json
+|   |-- fc-arm64.sh*
+|   |-- fc-x86_64.json
+|   |-- fc-x86_64.sh*
+|   |-- kraft-fc-arm64.sh*
+|   |-- kraft-fc-x86_64.sh*
+|   |-- kraft-qemu-arm64.sh*
+|   |-- kraft-qemu-x86_64.sh*
+|   |-- qemu-arm64.sh*
+|   `-- qemu-x86_64.sh*
+|-- run.yaml
+`-- setup.sh*
+```
+
+They are shell scripts, so you can use an editor or a text viewer to check their contents:
+
+```console
+cat scripts/run/kraft-fc-x86_64.sh
+```
+
+Now, invoke each script to build and run the application.
+A sample build and run set of commands is:
+
+```console
+./scripts/build/kraft-qemu-x86_64.sh
+./scripts/run/kraft-qemu-x86_64.sh
+```
+
+Another one is:
+
+```console
+./scripts/build/make-qemu-arm64.sh
+./scripts/run/qemu-arm64.sh
+```
+
+## Detailed Steps
+
 ### Configure
 
 Configuring, building and running a Unikraft application depends on our choice of platform and architecture.
-Currently, supported platforms are QEMU (KVM), Firecaker (KVM), Xen and linuxu.
+Currently, supported platforms are QEMU (KVM), Firecraker (KVM), Xen and linuxu.
 QEMU (KVM) is known to be working, so we focus on that.
 
 Supported architectures are x86_64 and AArch64.
 
-Use the corresponding the configuration files (`config-...`), according to your choice of platform and architecture.
+Use the corresponding the configuration files (`defconfigs/*`), according to your choice of platform and architecture.
 
 #### QEMU x86_64
 
-Use the `.config.helloworld-qemu-x86_64` configuration file together with `make defconfig` to create the configuration file:
+Use the `defconfigs/qemu-x86_64` configuration file together with `make defconfig` to create the configuration file:
 
 ```console
-UK_DEFCONFIG=$(pwd)/.config.helloworld-qemu-x86_64 make defconfig
+UK_DEFCONFIG=$(pwd)/defconfigs/qemu-x86_64 make defconfig
 ```
 
 This results in the creation of the `.config` file:
@@ -217,10 +275,10 @@ The `.config` file will be used in the build step.
 
 #### QEMU AArch64
 
-Use the `.config.helloworld-qemu-aarch64` configuration file together with `make defconfig` to create the configuration file:
+Use the `defconfigs/qemu-arm64` configuration file together with `make defconfig` to create the configuration file:
 
 ```console
-UK_DEFCONFIG=$(pwd)/.config.helloworld-qemu-aarch64 make defconfig
+UK_DEFCONFIG=$(pwd)/defconfigs/qemu-arm64 make defconfig
 ```
 
 Similar to the x86_64 configuration, this results in the creation of the `.config` file that will be used in the build step.
@@ -260,7 +318,7 @@ You will see a list of all the files generated by the build system:
   UKBI    helloworld_qemu-x86_64.dbg.bootinfo
   SCSTRIP helloworld_qemu-x86_64
   GZ      helloworld_qemu-x86_64.gz
-make[1]: Leaving directory '/media/stefan/projects/unikraft/scripts/workdir/apps/app-helloworld/.unikraft/unikraft'
+make[1]: Leaving directory 'helloworld/workdir/unikraft'
 ```
 
 At the end of the build command, the `helloworld_qemu-x86_64` unikernel image is generated.
@@ -291,7 +349,7 @@ Same as in the x86_64 setup, you will see a list of all the files generated by t
   UKBI    helloworld_qemu-arm64.dbg.bootinfo
   SCSTRIP helloworld_qemu-arm64
   GZ      helloworld_qemu-arm64.gz
-make[1]: Leaving directory '/media/stefan/projects/unikraft/scripts/workdir/apps/app-helloworld/.unikraft/unikraft'
+make[1]: Leaving directory 'helloworld/workdir/unikraft'
 ```
 
 Similarly to x86_64, at the end of the build command, the `helloworld_qemu-arm64` unikernel image is generated.
@@ -306,7 +364,7 @@ Run the resulting image using `qemu-system`.
 To run the QEMU x86_64 build, use:
 
 ```console
-/usr/bin/qemu-system-x86_64 -kernel build/helloworld_qemu-x86_64 -nographic
+qemu-system-x86_64 -kernel workdir/build/helloworld_qemu-x86_64 -nographic
 ```
 
 You will be met by the Unikraft banner, along with the `Hello, world!` message:
@@ -328,7 +386,7 @@ Hello world!
 To run the AArch64 build, use:
 
 ```console
-/usr/bin/qemu-system-aarch64 -kernel build/helloworld_qemu-arm64 -nographic -machine virt -cpu cortex-a57
+qemu-system-aarch64 -kernel workdir/build/helloworld_qemu-arm64 -nographic -machine virt -cpu cortex-a57
 ```
 
 Same as running on x86_64, the application will start:
@@ -352,7 +410,7 @@ Configure and build commands are similar to a QEMU-based build with an initrd-ba
 
 ```console
 make distclean
-UK_DEFCONFIG=$(pwd)/.config.helloworld-fc-x86_64 make defconfig
+UK_DEFCONFIG=$(pwd)/defconfigs/fc-x86_64 make defconfig
 make -j $(nproc)
 ```
 
@@ -372,7 +430,7 @@ Pass this file to the `firecracker-x86_64` command to run the Unikernel instance
 
 ```console
 rm /tmp/firecracker.socket
-firecracker-x86_64 --api-sock /tmp/firecracker.socket --config-file helloworld-fc-x86_64.json
+firecracker-x86_64 --api-sock /tmp/firecracker.socket --config-file scripts/run/fc-x86_64-helloworld.json
 ```
 
 Same as running with QEMU, the application will start:
