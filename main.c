@@ -18,6 +18,8 @@
 
 #define CET_SHSTK_EN			(1 << 0)
 
+#define SHSTK_SIZE			(512 * PAGE_SIZE)
+
 static inline void wrmsr(unsigned int msr, __u32 lo, __u32 hi)
 {
 	asm volatile("wrmsr"
@@ -37,7 +39,7 @@ void cr4_enable_cet() {
 	asm volatile ("mov %0, %%cr4\n\t" : : "r" (cr4_val) :);
 }
 
-void* create_shstk(size_t size) {
+void* create_shstk(size_t size, int create_restore_token) {
 	void *mem = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 	if (mem == MAP_FAILED) {
 		printf("map failed\n");
@@ -50,8 +52,10 @@ void* create_shstk(size_t size) {
 	}
 
 	// create a restore token
-	void *stack_start = ((char*)mem) + size - PAGE_SIZE;
-	*(unsigned long long*)stack_start = (unsigned long long) stack_start;
+	if (create_restore_token) {
+		void *stack_start = ((char*)mem) + size - PAGE_SIZE;
+		*(unsigned long long*)stack_start = (unsigned long long) stack_start;
+	}
 
 	// set the shadow stack page attributes
 	struct uk_vas* vas = uk_vas_get_active();
@@ -65,6 +69,26 @@ void* create_shstk(size_t size) {
 		return NULL;
 	}
 	return mem;
+}
+
+int init_isst() {
+	unsigned long long* a = mmap(NULL, 8 * sizeof(unsigned long long), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	if (a == NULL) {
+		printf("failed to init ISST\n");
+		return -1;
+	}
+	for (int i = 1; i < 8; i++) {
+		void* shstk = create_shstk(SHSTK_SIZE, 1);
+		if (shstk == NULL) {
+			printf("failed to init ISST shadow stack at index %d\n", i);
+			return -2;
+		}
+		a[i] = (unsigned long long)(((char*)shstk) + SHSTK_SIZE - PAGE_SIZE);
+		
+		printf("ISST entry created at %d: %llx token:%llx\n", i, a[i], ((unsigned long long*)a[i])[0]);
+	}
+	wrmsrl(MSR_IA32_INT_SSP_TAB, (unsigned long long) a);
+	return 0;
 }
 
 // the win function, shows the flag
@@ -91,10 +115,18 @@ void f() {
 		//printf("read one: %c\n", c);
 		a[i] = c;
 	}
-	a[i + 5] = 0;
+	a[i] = 0;
 	printf("read: %s\n", a);
 }
 
+void h(int size) {
+	char c[32];
+	for (int i = 0; i < size; i++) {
+		c[i] = 'A';
+	}
+	c[31] = 0;
+	printf("Hello %s\n", c);
+}
 
 // c and fact are used to make sure
 // the recursive calls are actually done as such and
@@ -120,17 +152,20 @@ int main()
 {
 	void *shstk;
 
-	size_t shstk_len = 128 * PAGE_SIZE;
-
 	cr4_enable_cet();
 
-	shstk = create_shstk(shstk_len);
+	shstk = create_shstk(SHSTK_SIZE, 1);
 	if (shstk == NULL) {
 		printf("failed to create shstk\n");
 		return 1;
 	}
 
-	wrmsrl(MSR_IA32_PL0_SSP, (unsigned long long)((char*)shstk + shstk_len - PAGE_SIZE));
+	if (init_isst() < 0) {
+		printf("failed to initialize ISST\n");
+		return 2;
+	}
+
+	wrmsrl(MSR_IA32_PL0_SSP, (unsigned long long)(((char*)shstk) + SHSTK_SIZE - PAGE_SIZE));
 	wrmsrl(MSR_IA32_S_CET, CET_SHSTK_EN);
 	asm volatile ("setssbsy" : : :); // apparently, for supervisor shadow stacks, this instruction needs to be called
 					 // and a "restore token" set in the shadow stack
@@ -140,10 +175,12 @@ int main()
 	
 	int n = fact(c() + 12);
 	printf("SSP: %p recursive: %d\n", ssp, n);
-//	FILE *f = fopen("payload.bin", "rb"); - does not work, need to check why
-//	if (f == NULL) {
-//		printf("file ptr is null\n");
-//	}
+//	h(128);
+	FILE *f = fopen("payload.bin", "rb"); //- does not work, need to check why
+	if (f == NULL) {
+		printf("file ptr is null\n");
+	}
+	printf("REEEEEEEE\n");
 	//g();
 	//f();
 
@@ -152,7 +189,7 @@ int main()
 	wrmsrl(MSR_IA32_S_CET, 0);
 	wrmsrl(MSR_IA32_PL0_SSP, 0);
 
-	munmap(shstk, shstk_len);
+	munmap(shstk, SHSTK_SIZE);
 
 	return 0;
 }
